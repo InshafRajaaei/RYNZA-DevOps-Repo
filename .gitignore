@@ -1,0 +1,40 @@
+# Node modules
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Env files (containing secrets)
+.env
+
+# Logs
+logs/
+*.log
+pids/
+*.pid
+*.seed
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Build folders
+build/
+dist/
+out/
+
+# Docker files (optional, if you don't want images in repo)
+*.tar
+docker-compose.override.yml
+
+# Cache and temp files
+.cache/
+.tmp/
+
+# IDE files
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# MongoDB memory server cache (your big files)
+backend/node_modules/.cache/mongodb-memory-server/
