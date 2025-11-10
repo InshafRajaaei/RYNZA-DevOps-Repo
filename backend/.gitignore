@@ -1,0 +1,12 @@
+# Node modules
+node_modules/
+
+# Environment files
+.env
+
+# MongoDB memory server cache
+node_modules/.cache/mongodb-memory-server/
+
+# Logs
+logs/
+*.log

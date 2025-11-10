@@ -1,0 +1,8 @@
+# Database dumps or local db files
+*.db
+*.sql
+*.sqlite
+*.sqlite3
+
+# Logs
+*.log
