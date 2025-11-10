@@ -1,0 +1,216 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:6
+    container_name: ecommerce-mongodb
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - ecommerce-network
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: ecommerce-backend
+    restart: unless-stopped
+    ports:
+      - "4000:4000"
+    environment:
+      - MONGODB_URL=mongodb://mongodb:27017/RYNZAdb
+      - CLOUDINARY_API_KEY=344298332585696
+      - CLOUDINARY_SECRET_KEY=C1x_yuQrGYNQ29Y6trklRjEBfU8
+      - CLOUDINARY_NAME=dtif0kosd
+      - JWT_SECRET=inshafrajaaei
+      - ADMIN_EMAIL=rynza@gmail.com
+      - ADMIN_PASSWORD=qwerty2002
+      - STRIPE_SECRET_KEY=sk_test_51RtNF2DddMly1X34IZTm13I87O7EY0YkvdWgAsxyaKODBAR6o1gz23Zx6nt8sSUQEKnwgglGLin0OXtGmKUB5fqu00PnFItGPH
+      - PORT=4000
+      - NODE_ENV=production
+    depends_on:
+      - mongodb
+    networks:
+      - ecommerce-network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        VITE_BACKEND_URL: http://localhost:4000
+    container_name: ecommerce-frontend
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    networks:
+      - ecommerce-network
+
+  admin-panel:
+    build:
+      context: ./admin-panel
+      dockerfile: Dockerfile
+      args:
+        VITE_BACKEND_URL: http://localhost:4000
+    container_name: ecommerce-admin
+    restart: unless-stopped
+    ports:
+      - "3001:3001"
+    depends_on:
+      - backend
+    networks:
+      - ecommerce-network
+
+volumes:
+  mongodb_data:
+
+networks:
+  ecommerce-network:
+    driver: bridge
+
+
+# version: '3.8'
+
+# services:
+#   # Backend API
+#   backend:
+#     build: 
+#       context: ./backend
+#       dockerfile: Dockerfile
+#     container_name: ecommerce-backend
+#     restart: unless-stopped
+#     ports:
+#       - "4000:4000"
+#     environment:
+#       - MONGODB_URL=mongodb+srv://qwertyinshaf:qwertyinshaf@cluster0.jhdmk9x.mongodb.net/RYNZAdb?retryWrites=true&w=majority
+#       - CLOUDINARY_API_KEY=344298332585696
+#       - CLOUDINARY_SECRET_KEY=C1x_yuQrGYNQ29Y6trklRjEBfU8
+#       - CLOUDINARY_NAME=dtif0kosd
+#       - JWT_SECRET=inshafrajaaei
+#       - ADMIN_EMAIL=rynza@gmail.com
+#       - ADMIN_PASSWORD=qwerty2002
+#       - STRIPE_SECRET_KEY=sk_test_51RtNF2DddMly1X34IZTm13I87O7EY0YkvdWgAsxyaKODBAR6o1gz23Zx6nt8sSUQEKnwgglGLin0OXtGmKUB5fqu00PnFItGPH
+#       - PORT=4000
+#       - NODE_ENV=production
+#     networks:
+#       - ecommerce-network
+
+#   # Frontend Application
+#   frontend:
+#     build:
+#       context: ./frontend
+#       dockerfile: Dockerfile
+#     container_name: ecommerce-frontend
+#     restart: unless-stopped
+#     ports:
+#       - "3000:3000"
+#     environment:
+#       - VITE_BACKEND_URL=http://localhost:4000
+#       - NODE_ENV=production
+#     depends_on:
+#       - backend
+#     networks:
+#       - ecommerce-network
+
+#   # Admin Panel
+#   admin-panel:
+#     build:
+#       context: ./admin-panel
+#       dockerfile: Dockerfile
+#     container_name: ecommerce-admin
+#     restart: unless-stopped
+#     ports:
+#       - "3001:3001"
+#     environment:
+#       - VITE_BACKEND_URL=http://localhost:4000
+#       - NODE_ENV=production
+#     depends_on:
+#       - backend
+#     networks:
+#       - ecommerce-network
+
+# networks:
+#   ecommerce-network:
+#     driver: bridge
+
+# version: '3.8'
+
+# services:
+#   mongodb:
+#     image: mongo:6
+#     container_name: ecommerce-mongodb
+#     restart: unless-stopped
+#     ports:
+#       - "27017:27017"
+#     volumes:
+#       - mongodb_data:/data/db
+#     networks:
+#       - ecommerce-network
+
+#   backend:
+#     build:
+#       context: ./backend
+#       dockerfile: Dockerfile
+#     container_name: ecommerce-backend
+#     restart: unless-stopped
+#     ports:
+#       - "4000:4000"
+#     environment:
+#       - MONGODB_URL=mongodb://mongodb:27017/RYNZAdb
+#       - CLOUDINARY_API_KEY=344298332585696
+#       - CLOUDINARY_SECRET_KEY=C1x_yuQrGYNQ29Y6trklRjEBfU8
+#       - CLOUDINARY_NAME=dtif0kosd
+#       - JWT_SECRET=inshafrajaaei
+#       - ADMIN_EMAIL=rynza@gmail.com
+#       - ADMIN_PASSWORD=qwerty2002
+#       - STRIPE_SECRET_KEY=sk_test_51RtNF2DddMly1X34IZTm13I87O7EY0YkvdWgAsxyaKODBAR6o1gz23Zx6nt8sSUQEKnwgglGLin0OXtGmKUB5fqu00PnFItGPH
+#       - PORT=4000
+#       - NODE_ENV=production
+#     depends_on:
+#       - mongodb
+#     networks:
+#       - ecommerce-network
+
+#   frontend:
+#     build:
+#       context: ./frontend
+#       dockerfile: Dockerfile
+#     container_name: ecommerce-frontend
+#     restart: unless-stopped
+#     ports:
+#       - "3000:3000"
+#     environment:
+#       - VITE_BACKEND_URL=http://backend:4000
+#       - NODE_ENV=production
+#     depends_on:
+#       - backend
+#     networks:
+#       - ecommerce-network
+
+#   admin-panel:
+#     build:
+#       context: ./admin-panel
+#       dockerfile: Dockerfile
+#     container_name: ecommerce-admin
+#     restart: unless-stopped
+#     ports:
+#       - "3001:3001"
+#     environment:
+#       - VITE_BACKEND_URL=http://backend:4000
+#       - NODE_ENV=production
+#     depends_on:
+#       - backend
+#     networks:
+#       - ecommerce-network
+
+# volumes:
+#   mongodb_data:
+
+# networks:
+#   ecommerce-network:
+#     driver: bridge

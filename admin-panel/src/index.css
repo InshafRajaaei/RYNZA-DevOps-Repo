@@ -1,0 +1,63 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+    font-family: Outfit, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+}
+
+/* Base Component Styles */
+@layer components {
+    .card {
+        @apply bg-white/60 backdrop-blur-sm border border-subtle/30 shadow-sm rounded-2xl;
+    }
+
+    .btn-primary {
+        @apply inline-flex items-center justify-center rounded-lg bg-dark text-white font-medium shadow-lg shadow-dark/20 hover:bg-dark/90 focus:outline-none focus:ring-2 focus:ring-subtle focus:ring-offset-2 focus:ring-offset-light transition;
+    }
+
+    .btn-ghost {
+        @apply inline-flex items-center justify-center rounded-lg border border-subtle bg-white/60 text-medium hover:border-dark hover:text-dark hover:bg-white/80 shadow-sm focus:outline-none focus:ring-2 focus:ring-subtle transition px-4 py-2;
+    }
+
+    .input {
+        @apply w-full rounded-lg border border-subtle bg-white/90 px-3 py-2 text-sm text-medium placeholder-subtle focus:border-dark focus:ring-2 focus:ring-dark/20 outline-none transition;
+    }
+
+    .label {
+        @apply block text-sm font-medium text-medium;
+    }
+
+    .sidebar-link {
+        @apply flex items-center gap-3 px-3 py-2.5 rounded-xl border border-transparent text-medium hover:bg-white/50 transition;
+    }
+    
+    .sidebar-link.active {
+        @apply bg-white shadow-sm text-dark font-semibold border-subtle/30;
+    }
+
+    .upload-tile {
+        @apply relative aspect-square w-full overflow-hidden rounded-xl border-2 border-dashed border-subtle/60 bg-white/70 hover:border-dark cursor-pointer transition;
+    }
+
+    .chip {
+        @apply px-3 py-1.5 rounded-full border cursor-pointer select-none text-sm transition;
+    }
+    .chip-active {
+        @apply bg-dark border-dark text-white;
+    }
+    .chip-inactive {
+        @apply bg-white border-subtle text-medium hover:border-dark hover:text-dark;
+    }
+    
+    .status-chip {
+        @apply inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium border;
+    }
+    .status-green {
+        @apply text-green-800 bg-green-100 border-green-200;
+    }
+    .status-amber {
+        @apply text-amber-800 bg-amber-100 border-amber-200;
+    }
+}
