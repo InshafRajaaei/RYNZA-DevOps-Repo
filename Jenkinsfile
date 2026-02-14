@@ -3,8 +3,8 @@ pipeline {
 
     environment {
         // AWS Credentials
-        AWS_ACCESS_KEY_ID     = 'AKIAQ2ALM3FHVHCTDFUY'  // Or use Jenkins Credentials
-        AWS_SECRET_ACCESS_KEY = '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'
+        AWS_ACCESS_KEY_ID     = credentials('aws-access-key')
+        AWS_SECRET_ACCESS_KEY = credentials('aws-secret-key')
         TF_VAR_region         = 'us-east-1'
         
         // Docker Config
