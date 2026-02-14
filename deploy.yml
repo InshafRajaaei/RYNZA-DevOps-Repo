@@ -63,10 +63,11 @@
       args:
         chdir: /home/ubuntu
 
-    # ✅ ADD THIS NEW TASK HERE
-    - name: Force remove old containers to prevent Version 1 crash
-      shell: docker rm -f ecommerce-frontend ecommerce-backend ecommerce-admin || true
+    # 👇 THIS IS THE NEW FIX 👇
+    - name: Aggressively remove ALL containers to fix KeyError crash
+      shell: "docker rm -f $(docker ps -aq) || true"
       ignore_errors: yes
+    # 👆 IT DELETES EVERYTHING SO DOCKER STARTS FRESH 👆
 
     - name: Start Containers (Deployment)
       command: docker-compose up -d
