@@ -56,10 +56,17 @@
           PORT=4000
           NODE_ENV=production
 
+    # ... (previous tasks like Pull Images) ...
+
     - name: Pull latest Docker images
       command: docker-compose pull
       args:
         chdir: /home/ubuntu
+
+    # ✅ ADD THIS NEW TASK HERE
+    - name: Force remove old containers to prevent Version 1 crash
+      shell: docker rm -f ecommerce-frontend ecommerce-backend ecommerce-admin || true
+      ignore_errors: yes
 
     - name: Start Containers (Deployment)
       command: docker-compose up -d
