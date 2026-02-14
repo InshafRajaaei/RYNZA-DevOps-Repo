@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    triggers {
+        pollSCM '* * * * *' 
+    }
+
     environment {
         // --- SECURE AWS CREDENTIALS ---
         // Jenkins pulls these from the vault automatically
