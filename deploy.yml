@@ -3,7 +3,6 @@
   hosts: all
   become: yes
   vars:
-    # These will be passed from Jenkins
     docker_registry: "inshafrajaaei"
     backend_image_tag: "latest"
     frontend_image_tag: "latest"
@@ -56,18 +55,14 @@
           PORT=4000
           NODE_ENV=production
 
-    # ... (previous tasks like Pull Images) ...
-
     - name: Pull latest Docker images
       command: docker-compose pull
       args:
         chdir: /home/ubuntu
 
-    # 👇 THIS IS THE NEW FIX 👇
     - name: Aggressively remove ALL containers to fix KeyError crash
       shell: "docker rm -f $(docker ps -aq) || true"
       ignore_errors: yes
-    # 👆 IT DELETES EVERYTHING SO DOCKER STARTS FRESH 👆
 
     - name: Start Containers (Deployment)
       command: docker-compose up -d
