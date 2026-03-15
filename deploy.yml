@@ -1,0 +1,70 @@
+---
+- name: Configure and Deploy RYNZA App
+  hosts: all
+  become: yes
+  vars:
+    docker_registry: "inshafrajaaei"
+    backend_image_tag: "latest"
+    frontend_image_tag: "latest"
+    admin_image_tag: "latest"
+
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    - name: Install Docker and Docker Compose (Ensure they exist)
+      apt:
+        name:
+          - docker.io
+          - docker-compose
+        state: present
+
+    - name: Start and Enable Docker
+      service:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Add ubuntu user to docker group
+      user:
+        name: ubuntu
+        groups: docker
+        append: yes
+
+    - name: Copy Docker Compose file to server
+      copy:
+        src: docker-compose.prod.yml
+        dest: /home/ubuntu/docker-compose.yml
+        owner: ubuntu
+        group: ubuntu
+        mode: '0644'
+
+    - name: Create .env file for the application
+      copy:
+        dest: /home/ubuntu/.env
+        content: |
+          MONGODB_URL={{ mongodb_url }}
+          CLOUDINARY_API_KEY={{ cloudinary_api_key }}
+          CLOUDINARY_SECRET_KEY={{ cloudinary_secret_key }}
+          CLOUDINARY_NAME={{ cloudinary_name }}
+          JWT_SECRET={{ jwt_secret }}
+          ADMIN_EMAIL={{ admin_email }}
+          ADMIN_PASSWORD={{ admin_password }}
+          STRIPE_SECRET_KEY={{ stripe_secret_key }}
+          PORT=4000
+          NODE_ENV=production
+
+    - name: Pull latest Docker images
+      command: docker-compose pull
+      args:
+        chdir: /home/ubuntu
+
+    - name: Aggressively remove ALL containers to fix KeyError crash
+      shell: "docker rm -f $(docker ps -aq) || true"
+      ignore_errors: yes
+
+    - name: Start Containers (Deployment)
+      command: docker-compose up -d
+      args:
+        chdir: /home/ubuntu
